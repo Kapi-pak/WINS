@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤑🤑🤑🤑🤑</title>
+    <style>
+        /* --------------------------------------------
+           CIEMNY MOTYW – całość w jednym pliku
+        -------------------------------------------- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            width: 100%;
+            max-width: 750px;
+            border: 1px solid #333;
+        }
+        h1 {
+            text-align: center;
+            color: #f0f0f0;
+            margin: 0 0 20px 0;
+            font-weight: 400;
+            font-size: 26px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+        }
+        h1 span {
+            color: #f1c40f;
+        }
+
+        /* ---- Pasek blokady ---- */
+        .lock-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        #lockBtn {
+            background-color: #2c2c2c;
+            color: #aaa;
+            border: 1px solid #444;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        #lockBtn:hover {
+            background-color: #3a3a3a;
+            color: #fff;
+        }
+        #lockBtn.unlocked {
+            background-color: #2a4a3a;
+            color: #2ecc71;
+            border-color: #2ecc71;
+        }
+
+        /* ---- Tabela ---- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 16px;
+        }
+        th {
+            background-color: #2c2c2c;
+            color: #d0d0d0;
+            font-weight: 500;
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 2px solid #444;
+        }
+        th:last-child {
+            text-align: center;
+        }
+        td {
+            padding: 10px 10px;
+            border-bottom: 1px solid #2c2c2c;
+            vertical-align: middle;
+            color: #e0e0e0;
+        }
+        td:first-child {
+            font-weight: 500;
+            color: #ffffff;
+        }
+        td:nth-child(2) {
+            font-weight: 600;
+            color: #2ecc71;
+            text-align: right;
+            padding-right: 20px;
+        }
+        td:last-child {
+            text-align: center;
+        }
+
+        /* ---- Wiersz sumy ---- */
+        .total-row td {
+            background-color: #252525;
+            font-weight: bold;
+            font-size: 18px;
+            border-top: 3px solid #444;
+            padding-top: 14px;
+        }
+        .total-row td:first-child {
+            color: #f0f0f0;
+        }
+        .total-row td:nth-child(2) {
+            color: #f39c12;
+            font-size: 22px;
+        }
+
+        /* ---- Input (pole na kwotę) ---- */
+        input[type="number"] {
+            width: 80px;
+            padding: 8px 6px;
+            border: 2px solid #444;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 500;
+            background-color: #2a2a2a;
+            color: #fff;
+            transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+            outline: none;
+        }
+        input[type="number"]:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52,152,219,0.3);
+            background-color: #1f1f1f;
+        }
+        input[type="number"]:disabled {
+            background-color: #1a1a1a;
+            color: #555;
+            border-color: #2a2a2a;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        input[type="number"]::placeholder {
+            color: #555;
+            font-weight: 300;
+        }
+        /* delikatne strzałki */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            opacity: 0.5;
+        }
+
+        /* ---- Status i stopka ---- */
+        .status-msg {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 12px;
+            color: #888;
+        }
+        .status-msg.locked {
+            color: #e74c3c;
+        }
+        .status-msg.unlocked {
+            color: #2ecc71;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #666;
+        }
+        .footer span {
+            background-color: #252525;
+            padding: 4px 14px;
+            border-radius: 30px;
+            border: 1px solid #333;
+        }
+
+        /* ---- Responsywność ---- */
+        @media (max-width: 500px) {
+            .container { padding: 15px; }
+            input[type="number"] { width: 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>💰 <span>WYGRANE</span></h1>
+
+    <!-- Pasek blokady -->
+    <div class="lock-bar">
+        <button id="lockBtn">🔒 Zablokowane</button>
+    </div>
+
+    <!-- Tabela -->
+    <table id="playerTable">
+        <thead>
+            <tr>
+                <th>Nick</th>
+                <th>WYGRANA ($)</th>
+                <th>nastepna</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+        <tfoot id="tableFooter"></tfoot>
+    </table>
+
+    <!-- Komunikat statusu -->
+    <div id="statusMsg" class="status-msg locked">🔒 Edycja zablokowana – kliknij przycisk, aby wpisać hasło</div>
+
+    <!-- Stopka -->
+    <div class="footer">
+        <span>💾 Dane zapisują się lokalnie w przeglądarce</span>
+    </div>
+</div>
+
+<script>
+    //  KONFIGURACJA – zmień hasło według uznania
+    
+    const ADMIN_PASSWORD = 'kapi';  
+
+    // Domyślna lista graczy
+    const DEFAULT_PLAYERS = [
+        { id: 'kapi',   name: 'KAPI',   amount: 1250 },
+        { id: 'skala',  name: 'SKALA',  amount: 550 },
+        { id: 'rio',    name: 'RIO',    amount: 450 },
+        { id: 'gruby',  name: 'GRUBY',  amount: 450 },
+        { id: 'michal', name: 'MICHAL', amount: 100 },
+        { id: 'maciek', name: 'MACIEK', amount: 75 }
+    ];
+
+    const STORAGE_KEY = 'notatnik_wygrane_dark_locked';
+
+    // =============================================================
+    //  STAN APLIKACJI
+    // =============================================================
+    let players = [];
+    let isUnlocked = false;   // czy edycja jest odblokowana
+
+    // =============================================================
+    //  OBSŁUGA LOCALSTORAGE
+    // =============================================================
+    function loadData() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored);
+                if (Array.isArray(parsed) && parsed.length && parsed[0].amount !== undefined) {
+                    players = parsed;
+                    return;
+                }
+            } catch (e) {}
+        }
+        // jeśli brak danych lub błąd – ładujemy domyślnych
+        players = JSON.parse(JSON.stringify(DEFAULT_PLAYERS));
+        saveData();
+    }
+
+    function saveData() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(players));
+    }
+
+    // =============================================================
+    //  RENDEROWANIE TABELI
+    // =============================================================
+    function renderTable() {
+        const tbody = document.getElementById('tableBody');
+        const tfoot = document.getElementById('tableFooter');
+        tbody.innerHTML = '';
+        tfoot.innerHTML = '';
+
+        // wiersze dla graczy
+        players.forEach((player) => {
+            const row = document.createElement('tr');
+
+            // nazwa
+            const nameCell = document.createElement('td');
+            nameCell.textContent = player.name;
+
+            // kwota
+            const amountCell = document.createElement('td');
+            amountCell.className = 'amount-cell';
+            amountCell.textContent = player.amount;
+
+            // input "nastepna"
+            const inputCell = document.createElement('td');
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.placeholder = '+';
+            input.step = 'any';
+            input.min = '0';
+            input.dataset.id = player.id;
+            input.className = 'next-input';
+
+            // ---- Walidacja: blokada minusa i liter ----
+            input.addEventListener('keydown', function(e) {
+                // blokujemy klawisze '-' oraz 'e' (eksponenta)
+                if (e.key === '-' || e.key === 'e' || e.key === 'E') {
+                    e.preventDefault();
+                    return false;
+                }
+                // jeśli zablokowane, nie pozwalamy na wpisywanie
+                if (!isUnlocked) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            // ---- Obsługa Enter i zmiany ----
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (isUnlocked) handleAddAmount(this);
+                }
+            });
+            input.addEventListener('change', function() {
+                if (!isUnlocked) {
+                    this.value = '';
+                    return;
+                }
+                if (this.value !== '' && !isNaN(parseFloat(this.value))) {
+                    handleAddAmount(this);
+                } else {
+                    this.value = '';
+                }
+            });
+
+            // ustawienie stanu disabled
+            input.disabled = !isUnlocked;
+
+            inputCell.appendChild(input);
+            row.appendChild(nameCell);
+            row.appendChild(amountCell);
+            row.appendChild(inputCell);
+            tbody.appendChild(row);
+        });
+
+        // ---- wiersz SUMA ----
+        const totalRow = document.createElement('tr');
+        totalRow.className = 'total-row';
+        const label = document.createElement('td');
+        label.textContent = 'SUMA:';
+        const totalAmount = document.createElement('td');
+        totalAmount.id = 'total-amount';
+        totalAmount.textContent = calculateTotal();
+        const empty = document.createElement('td'); // puste dla kolumny "nastepna"
+        totalRow.appendChild(label);
+        totalRow.appendChild(totalAmount);
+        totalRow.appendChild(empty);
+        tfoot.appendChild(totalRow);
+
+        // odświeżenie komunikatu (stan blokady)
+        updateStatus();
+    }
+
+    // =============================================================
+    //  LOGIKA DODAWANIA KWOTY
+    // =============================================================
+    function handleAddAmount(input) {
+        const raw = input.value.trim();
+        if (raw === '') return;
+
+        const add = parseFloat(raw);
+        if (isNaN(add) || add <= 0) {
+            input.value = '';
+            return;
+        }
+
+        const playerId = input.dataset.id;
+        const player = players.find(p => p.id === playerId);
+        if (!player) return;
+
+        // dodajemy
+        player.amount += add;
+
+        // aktualizacja wiersza
+        const row = input.closest('tr');
+        const amountCell = row.querySelector('.amount-cell');
+        if (amountCell) amountCell.textContent = player.amount;
+        input.value = '';
+
+        // aktualizacja sumy
+        document.getElementById('total-amount').textContent = calculateTotal();
+
+        // zapis
+        saveData();
+    }
+
+    function calculateTotal() {
+        return players.reduce((sum, p) => sum + p.amount, 0);
+    }
+
+    // =============================================================
+    //  BLOKADA / ODBLOKOWANIE
+    // =============================================================
+    function toggleLock() {
+        if (isUnlocked) {
+            // blokujemy
+            isUnlocked = false;
+            applyLockState();
+            document.getElementById('statusMsg').textContent = '🔒 Edycja zablokowana';
+            document.getElementById('statusMsg').className = 'status-msg locked';
+            document.getElementById('lockBtn').textContent = '🔒 Zablokowane';
+            document.getElementById('lockBtn').classList.remove('unlocked');
+        } else {
+            // próba odblokowania
+            const password = prompt('Podaj hasło administracyjne, aby odblokować edycję:');
+            if (password === ADMIN_PASSWORD) {
+                isUnlocked = true;
+                applyLockState();
+                document.getElementById('statusMsg').textContent = '🔓 Edycja odblokowana (możesz dodawać kwoty)';
+                document.getElementById('statusMsg').className = 'status-msg unlocked';
+                document.getElementById('lockBtn').textContent = '🔓 Odblokowane';
+                document.getElementById('lockBtn').classList.add('unlocked');
+            } else if (password !== null) {
+                alert('❌ Błędne hasło!');
+            }
+        }
+    }
+
+    // ustawia stan disabled na wszystkich inputach
+    function applyLockState() {
+        const inputs = document.querySelectorAll('.next-input');
+        inputs.forEach(inp => {
+            inp.disabled = !isUnlocked;
+        });
+    }
+
+    // aktualizuje komunikat po renderze (przywraca stan domyślny – zablokowany)
+    function updateStatus() {
+        // przy starcie i po renderze ustawiamy stan na zablokowany (jeśli nie odblokowany)
+        if (!isUnlocked) {
+            document.getElementById('statusMsg').textContent = '🔒 Edycja zablokowana – kliknij przycisk, aby wpisać hasło';
+            document.getElementById('statusMsg').className = 'status-msg locked';
+            document.getElementById('lockBtn').textContent = '🔒 Zablokowane';
+            document.getElementById('lockBtn').classList.remove('unlocked');
+        } else {
+            // jeśli odblokowane – ustawiamy odpowiedni komunikat
+            document.getElementById('statusMsg').textContent = '🔓 Edycja odblokowana (możesz dodawać kwoty)';
+            document.getElementById('statusMsg').className = 'status-msg unlocked';
+            document.getElementById('lockBtn').textContent = '🔓 Odblokowane';
+            document.getElementById('lockBtn').classList.add('unlocked');
+        }
+        // wymuszenie stanu disabled na inputach (zabezpieczenie)
+        applyLockState();
+    }
+
+    // =============================================================
+    //  RESET (opcjonalna funkcja w konsoli)
+    // =============================================================
+    window.resetToDefault = function() {
+        if (confirm('Przywrócić domyślne kwoty? (wszystkie zmiany zostaną utracone)')) {
+            players = JSON.parse(JSON.stringify(DEFAULT_PLAYERS));
+            saveData();
+            renderTable();
+            // po resecie ustawiamy domyślnie zablokowane
+            isUnlocked = false;
+            updateStatus();
+        }
+    };
+
+    // =============================================================
+    //  START APLIKACJI
+    // =============================================================
+    loadData();
+    renderTable();
+
+    // domyślnie blokada włączona
+    isUnlocked = false;
+    updateStatus();
+
+    // nasłuch na przycisk blokady
+    document.getElementById('lockBtn').addEventListener('click', toggleLock);
+
+    // informacje w konsoli
+    console.log('💰 Notatnik Wygranych (wersja z blokadą)');
+    console.log('🔑 Domyślne hasło: admin123 (zmień w kodzie!)');
+    console.log('🔄 Aby zresetować dane, wpisz w konsoli: resetToDefault()');
+</script>
+
+</body>
+</html>
